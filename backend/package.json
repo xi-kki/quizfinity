@@ -1,0 +1,19 @@
+{
+  "name": "quizfinity-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "generate": "azle generate",
+    "deploy:local": "dfx deploy",
+    "deploy:ic": "dfx deploy --network ic"
+  },
+  "dependencies": {
+    "azle": "^0.27.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@types/uuid": "^10.0.0"
+  }
+}

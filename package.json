@@ -1,0 +1,13 @@
+{
+  "name": "quizfinity",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Learn Web3. Earn Real Rewards. Own Your Progress.",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "lint": "cd frontend && npm run lint",
+    "type-check": "cd frontend && npm run type-check"
+  }
+}

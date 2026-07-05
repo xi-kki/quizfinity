@@ -1,0 +1,57 @@
+type QuizCategory = record {
+  id: text;
+  name: text;
+  description: text;
+  icon: text;
+  createdAt: nat64;
+  updatedAt: nat64;
+};
+
+type Question = record {
+  id: text;
+  categoryId: text;
+  question: text;
+  options: vec text;
+  correctAnswer: text;
+  explanation: text;
+  difficulty: text;
+  points: nat64;
+  createdAt: nat64;
+  updatedAt: nat64;
+};
+
+type QuizSession = record {
+  id: text;
+  userId: text;
+  categoryId: text;
+  score: nat64;
+  totalQuestions: nat64;
+  correctAnswers: nat64;
+  completed: bool;
+  startedAt: nat64;
+  completedAt: opt nat64;
+};
+
+type SubmitAnswerResult = record {
+  correct: bool;
+  correctAnswer: text;
+  explanation: text;
+  pointsEarned: nat64;
+  totalScore: nat64;
+};
+
+service : {
+  createCategory: (record { name: text; description: text; icon: text }) -> (result { Ok: QuizCategory; Err: text });
+  getCategory: (text) -> (result { Ok: QuizCategory; Err: text }) query;
+  getAllCategories: () -> (vec QuizCategory) query;
+  createQuestion: (record { categoryId: text; question: text; options: vec text; correctAnswer: text; explanation: text; difficulty: text; points: nat64 }) -> (result { Ok: Question; Err: text });
+  getQuestionsByCategory: (text) -> (result { vec Question; Err: text }) query;
+  getQuestion: (text) -> (result { Ok: Question; Err: text }) query;
+  getAllQuestions: () -> (vec Question) query;
+  startQuiz: (record { userId: text; categoryId: text }) -> (result { Ok: QuizSession; Err: text });
+  submitAnswer: (record { sessionId: text; questionId: text; selectedAnswer: text }) -> (result { Ok: SubmitAnswerResult; Err: text });
+  completeQuiz: (text) -> (result { Ok: QuizSession; Err: text });
+  getQuizSession: (text) -> (result { Ok: QuizSession; Err: text }) query;
+  getUserSessions: (text) -> (vec QuizSession) query;
+  seedCategories: () -> (vec QuizCategory);
+};

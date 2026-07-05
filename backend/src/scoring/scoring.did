@@ -1,0 +1,38 @@
+type UserScore = record {
+  userId: text;
+  totalXP: nat64;
+  quizzesCompleted: nat64;
+  correctAnswers: nat64;
+  totalAnswers: nat64;
+  streak: nat64;
+  lastQuizDate: nat64;
+  tier: text;
+  rank: nat64;
+  updatedAt: nat64;
+};
+
+type Achievement = record {
+  id: text;
+  userId: text;
+  name: text;
+  description: text;
+  icon: text;
+  unlockedAt: nat64;
+};
+
+type LeaderboardEntry = record {
+  userId: text;
+  totalXP: nat64;
+  quizzesCompleted: nat64;
+  tier: text;
+  rank: nat64;
+};
+
+service : {
+  updateScore: (record { userId: text; xpEarned: nat64; correct: bool; totalQuestions: nat64 }) -> (result { Ok: UserScore; Err: text });
+  getScore: (text) -> (result { Ok: UserScore; Err: text }) query;
+  getLeaderboard: (nat64, nat64) -> (vec LeaderboardEntry) query;
+  getUserCount: () -> (nat64) query;
+  getUserAchievements: (text) -> (vec Achievement) query;
+  getAllAchievements: () -> (vec Achievement) query;
+};

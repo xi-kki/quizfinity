@@ -1,0 +1,25 @@
+{
+  "canisters": {
+    "quiz_engine": {
+      "type": "azle",
+      "main": "src/quiz_engine/index.ts",
+      "candid": "src/quiz_engine/quiz_engine.did"
+    },
+    "scoring": {
+      "type": "azle",
+      "main": "src/scoring/index.ts",
+      "candid": "src/scoring/scoring.did"
+    },
+    "user": {
+      "type": "azle",
+      "main": "src/user/index.ts",
+      "candid": "src/user/user.did"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "npm run build"
+    }
+  },
+  "output": "../frontend/src/lib/declarations"
+}

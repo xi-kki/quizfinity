@@ -1,0 +1,23 @@
+type UserProfile = record {
+  id: text;
+  username: text;
+  displayName: text;
+  email: opt text;
+  avatar: text;
+  bio: opt text;
+  principalId: text;
+  authProvider: text;
+  createdAt: nat64;
+  updatedAt: nat64;
+  isActive: bool;
+};
+
+service : {
+  createUser: (text, text, text, text, text) -> (result { Ok: UserProfile; Err: text });
+  getUser: (text) -> (result { Ok: UserProfile; Err: text }) query;
+  getUserByPrincipal: (text) -> (result { Ok: UserProfile; Err: text }) query;
+  updateProfile: (text, record { displayName: opt text; avatar: opt text; bio: opt text }) -> (result { Ok: UserProfile; Err: text });
+  deactivateUser: (text) -> (result { Ok: UserProfile; Err: text });
+  getUserCount: () -> (nat64) query;
+  getAllUsers: () -> (vec UserProfile) query;
+};
