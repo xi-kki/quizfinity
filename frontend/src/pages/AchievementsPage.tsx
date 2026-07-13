@@ -3,24 +3,25 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/icp';
 import type { Achievement } from '@/types';
-import { Award, Loader2, Sparkles } from 'lucide-react';
+import { Award, Loader2, Sparkles, Lock } from 'lucide-react';
+import { getIcon } from '@/lib/icons';
 import clsx from 'clsx';
 
 // All possible achievements (for showing locked ones)
 const ALL_ACHIEVEMENTS = [
-  { name: 'First Quiz', desc: 'Complete your first quiz', icon: '🎯' },
-  { name: 'Quick Learner', desc: 'Complete 10 quizzes', icon: '📚' },
-  { name: 'Quiz Master', desc: 'Complete 50 quizzes', icon: '🏆' },
-  { name: 'Perfect Score', desc: 'Get 100% on any quiz', icon: '💯' },
-  { name: 'Bronze Tier', desc: 'Reach Bronze tier', icon: '🥉' },
-  { name: 'Silver Tier', desc: 'Reach Silver tier', icon: '🥈' },
-  { name: 'Gold Tier', desc: 'Reach Gold tier', icon: '🥇' },
-  { name: 'Platinum Tier', desc: 'Reach Platinum tier', icon: '💎' },
-  { name: 'Diamond Tier', desc: 'Reach Diamond tier', icon: '👑' },
-  { name: 'On Fire', desc: '7-day quiz streak', icon: '🔥' },
-  { name: 'Unstoppable', desc: '30-day quiz streak', icon: '⚡' },
-  { name: 'Century', desc: 'Earn 100 XP', icon: '💪' },
-  { name: 'Thousand', desc: 'Earn 1,000 XP', icon: '🌟' },
+  { name: 'First Quiz', desc: 'Complete your first quiz', icon: 'target' },
+  { name: 'Quick Learner', desc: 'Complete 10 quizzes', icon: 'book-open' },
+  { name: 'Quiz Master', desc: 'Complete 50 quizzes', icon: 'trophy' },
+  { name: 'Perfect Score', desc: 'Get 100% on any quiz', icon: 'check-circle' },
+  { name: 'Bronze Tier', desc: 'Reach Bronze tier', icon: 'medal-bronze' },
+  { name: 'Silver Tier', desc: 'Reach Silver tier', icon: 'medal-silver' },
+  { name: 'Gold Tier', desc: 'Reach Gold tier', icon: 'medal-gold' },
+  { name: 'Platinum Tier', desc: 'Reach Platinum tier', icon: 'gem' },
+  { name: 'Diamond Tier', desc: 'Reach Diamond tier', icon: 'crown' },
+  { name: 'On Fire', desc: '7-day quiz streak', icon: 'flame' },
+  { name: 'Unstoppable', desc: '30-day quiz streak', icon: 'zap' },
+  { name: 'Century', desc: 'Earn 100 XP', icon: 'dumbbell' },
+  { name: 'Thousand', desc: 'Earn 1,000 XP', icon: 'star' },
 ];
 
 export default function AchievementsPage() {
@@ -82,6 +83,7 @@ export default function AchievementsPage() {
           {ALL_ACHIEVEMENTS.map((ach) => {
             const unlocked = unlockedNames.has(ach.name);
             const userAch = achievements.find((a) => a.name === ach.name);
+            const Icon = getIcon(ach.icon);
 
             return (
               <div
@@ -98,7 +100,18 @@ export default function AchievementsPage() {
                     <Sparkles className="h-4 w-4 text-brand-500" />
                   </div>
                 )}
-                <span className="text-4xl">{unlocked ? ach.icon : '🔒'}</span>
+                <div className={clsx(
+                  'flex h-12 w-12 items-center justify-center rounded-xl',
+                  unlocked
+                    ? 'bg-brand-100 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400'
+                    : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600'
+                )}>
+                  {unlocked ? (
+                    <Icon className="h-6 w-6" />
+                  ) : (
+                    <Lock className="h-5 w-5" />
+                  )}
+                </div>
                 <h3 className="mt-3 font-bold text-gray-900 dark:text-white">
                   {ach.name}
                 </h3>

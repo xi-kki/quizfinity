@@ -13,6 +13,7 @@ import {
   Shield,
   Coins,
 } from 'lucide-react';
+import { getIcon } from '@/lib/icons';
 
 export default function HomePage() {
   const { status, login } = useAuth();
@@ -156,15 +157,20 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.slice(0, 6).map((cat) => (
-              <Link key={cat.id} to={`/quiz/${cat.id}`} className="card-hover group">
-                <span className="text-3xl">{cat.icon}</span>
-                <h3 className="mt-3 font-bold text-gray-900 group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
-                  {cat.name}
-                </h3>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{cat.description}</p>
-              </Link>
-            ))}
+            {categories.slice(0, 6).map((cat) => {
+              const Icon = getIcon(cat.icon);
+              return (
+                <Link key={cat.id} to={`/quiz/${cat.id}`} className="card-hover group">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-3 font-bold text-gray-900 group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
+                    {cat.name}
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{cat.description}</p>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}

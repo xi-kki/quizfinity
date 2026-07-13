@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { api } from '@/lib/icp';
 import type { QuizCategory } from '@/types';
 import { BookOpen, ArrowRight, Search, Loader2 } from 'lucide-react';
+import { getIcon } from '@/lib/icons';
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<QuizCategory[]>([]);
@@ -66,7 +67,12 @@ export default function CategoriesPage() {
               <div className="absolute right-4 top-4 opacity-0 transition-opacity group-hover:opacity-100">
                 <ArrowRight className="h-5 w-5 text-brand-500" />
               </div>
-              <span className="text-4xl">{cat.icon}</span>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
+                {(() => {
+                  const Icon = getIcon(cat.icon);
+                  return <Icon className="h-6 w-6" />;
+                })()}
+              </div>
               <h3 className="mt-4 text-lg font-bold text-gray-900 group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400">
                 {cat.name}
               </h3>

@@ -36,13 +36,95 @@ function getActors() {
 // ── Mock Data ────────────────────────────────────────
 
 const MOCK_CATEGORIES: QuizCategory[] = [
-  { id: 'cat-1', name: 'Blockchain Basics', description: 'Learn the fundamentals of blockchain technology', icon: '🔗', createdAt: 0n, updatedAt: 0n },
-  { id: 'cat-2', name: 'ICP Fundamentals', description: 'Master the Internet Computer Protocol', icon: '🌐', createdAt: 0n, updatedAt: 0n },
-  { id: 'cat-3', name: 'DeFi & Tokenomics', description: 'Understand decentralized finance and tokens', icon: '💰', createdAt: 0n, updatedAt: 0n },
-  { id: 'cat-4', name: 'NFTs & Digital Art', description: 'Explore non-fungible tokens', icon: '🎨', createdAt: 0n, updatedAt: 0n },
-  { id: 'cat-5', name: 'Web3 Security', description: 'Stay safe in the decentralized web', icon: '🛡️', createdAt: 0n, updatedAt: 0n },
-  { id: 'cat-6', name: 'Smart Contracts', description: 'Dive into programmable contracts', icon: '📝', createdAt: 0n, updatedAt: 0n },
+  { id: 'cat-1', name: 'Blockchain Basics', description: 'Learn the fundamentals of blockchain technology', icon: 'link', createdAt: 0n, updatedAt: 0n },
+  { id: 'cat-2', name: 'ICP Fundamentals', description: 'Master the Internet Computer Protocol', icon: 'globe', createdAt: 0n, updatedAt: 0n },
+  { id: 'cat-3', name: 'DeFi & Tokenomics', description: 'Understand decentralized finance and tokens', icon: 'coins', createdAt: 0n, updatedAt: 0n },
+  { id: 'cat-4', name: 'NFTs & Digital Art', description: 'Explore non-fungible tokens', icon: 'palette', createdAt: 0n, updatedAt: 0n },
+  { id: 'cat-5', name: 'Web3 Security', description: 'Stay safe in the decentralized web', icon: 'shield', createdAt: 0n, updatedAt: 0n },
+  { id: 'cat-6', name: 'Smart Contracts', description: 'Dive into programmable contracts', icon: 'file-code', createdAt: 0n, updatedAt: 0n },
 ];
+
+// ── Lesson Content (short teach-before-quiz) ──────────
+
+const LESSONS: Record<string, string> = {
+  // ─── Blockchain Basics ───
+  'q-1': 'A blockchain is like a shared spreadsheet that thousands of computers maintain together. Instead of one bank holding the records, everyone has a copy — and new entries require network agreement. This makes it nearly impossible to cheat or tamper with data.',
+  'q-2': 'When thousands of computers need to agree on what\'s true, they use a consensus mechanism. Think of it as a voting system where nodes validate transactions. The two most common are Proof of Work (solve puzzles) and Proof of Stake (hold tokens).',
+  'q-3': 'Blockchain security comes from three pillars: cryptographic hashing (math-based fingerprints), decentralization (no single point of failure), and consensus (network agreement). No firewall or antivirus needed — the math does the protection.',
+  'q-10': 'A block is like a page in a ledger. It bundles multiple transactions together, adds a timestamp, and includes a hash (fingerprint) of the previous block. This creates a chain — hence "blockchain." Alter one block, and every following block breaks.',
+  'q-11': 'Hashing takes any input (a file, a transaction, your password) and produces a fixed-length string. Change one character in the input, and the hash completely changes. Blockchains use this to verify data hasn\'t been tampered with.',
+  'q-12': 'In traditional systems, one company controls the servers. Decentralization spreads that control across hundreds or thousands of independent nodes. No single entity can shut it down, censor transactions, or change the rules unilaterally.',
+  'q-13': 'A node is simply a computer running blockchain software. It stores a copy of the blockchain, validates transactions, and helps propagate new blocks. Anyone can run a node — that\'s what makes the network permissionless.',
+  'q-14': 'Proof of Work was Bitcoin\'s breakthrough. Miners compete to solve complex mathematical puzzles. The winner gets to add the next block and earn a reward. It\'s secure but energy-intensive — that\'s why Ethereum moved to Proof of Stake.',
+  'q-15': 'Instead of burning electricity, Proof of Stake selects validators based on how many tokens they\'re willing to lock up as collateral. More stake = higher chance of being chosen. If you cheat, you lose your stake. Energy-efficient and increasingly popular.',
+  'q-16': 'Your private key is a secret number that proves you own your crypto. It\'s used to sign transactions — like a digital signature. If someone gets your private key, they control your funds. Never share it, never store it online.',
+  'q-17': 'Your public key is derived from your private key and generates your wallet address. Share it freely — people use it to send you crypto. It\'s like your email address: safe to public, but can\'t access your inbox.',
+
+  // ─── ICP Fundamentals ───
+  'q-4': 'The Internet Computer (ICP) is a blockchain that extends the internet itself. Unlike other chains that only store data, ICP can host entire applications — frontend, backend, and storage — all running on a decentralized network of nodes.',
+  'q-5': 'A canister is ICP\'s version of a smart contract — but more powerful. It bundles code (compiled to WebAssembly) with persistent storage and can directly serve web content to browsers. Think of it as a server that lives on-chain.',
+  'q-20': 'Cycles are ICP\'s computational gas. When you deploy a canister, cycles are burned to pay for CPU, memory, and bandwidth. Unlike Ethereum\'s volatile gas fees, cycle costs on ICP are predictable and stable.',
+  'q-21': 'Internet Identity replaces passwords with WebAuthn — your fingerprint, Face ID, or security key. No seed phrases to memorize. You get an anchor number, and authentication happens through your device\'s built-in biometrics.',
+  'q-22': 'Most blockchains can only store data. ICP canisters can serve HTML, CSS, and JavaScript directly to browsers — meaning entire dApps live fully on-chain with zero centralized hosting. No AWS, no Vercel needed.',
+  'q-23': 'Subnets are independent blockchains within ICP, each run by a set of nodes. Canisters live on subnets, and different subnets can specialize — some for governance (NNS), some for general computation, some for Bitcoin integration.',
+  'q-24': 'ICP supports multiple languages: Motoko (native, designed for ICP), Rust (via CDK), TypeScript (via Azle), and Python (via Kybra). Azle compiles TypeScript to WebAssembly, letting JS developers build on ICP.',
+  'q-25': 'The NNS (Network Nervous System) is ICP\'s on-chain government. Users stake ICP in "neurons" and vote on proposals — from upgrading the network to spending treasury funds. It\'s democracy, but for software.',
+  'q-26': 'A neuron is a staked ICP token that earns voting power. The more ICP you stake and the longer your dissolve delay (lock-up period), the more influence you have. Neurons earn rewards for participating in governance.',
+  'q-27': 'ICP tokens have three uses: (1) Convert to cycles for canister computation, (2) Stake in neurons for NNS governance voting, (3) Earn rewards as staking or node provider rewards. It\'s the fuel, governance, and incentive layer.',
+  'q-28': 'Chain-key cryptography lets ICP subnets collectively sign transactions without any single node being trusted. This enables ICP to interact with Bitcoin, Ethereum, and other chains — all without bridges or intermediaries.',
+  'q-29': 'ckBTC (chain-key Bitcoin) is a 1:1 backed token on ICP. Real BTC is held in a canister, and ckBTC lets you use Bitcoin on ICP with low fees and fast finality. It\'s like wrapping Bitcoin, but powered by chain-key cryptography.',
+  'q-30': 'The SNS (Service Nervous System) lets developers decentralize their dApps. It creates a governance token, a treasury, and hands control to a DAO — similar to how NNS governs ICP, but for individual projects.',
+
+  // ─── DeFi & Tokenomics ───
+  'q-31': 'DeFi (Decentralized Finance) recreates traditional financial services — lending, borrowing, trading — using smart contracts instead of banks. No middleman, no paperwork, accessible to anyone with an internet connection.',
+  'q-32': 'A DEX (Decentralized Exchange) lets you trade tokens directly with other users via smart contracts. No central authority holds your funds. Examples: ICPSwap on ICP, Uniswap on Ethereum. You swap, you custody.',
+  'q-33': 'AMMs (Automated Market Makers) replace traditional order books with mathematical formulas. Prices adjust automatically based on supply and demand in liquidity pools. No human market maker needed.',
+  'q-34': 'A liquidity pool is a smart contract holding two tokens (e.g., ICP/ckUSDC). Traders swap against this pool, and liquidity providers (LPs) earn fees from each trade. It\'s the engine behind most DEXs.',
+  'q-35': 'Yield farming means moving your crypto across different DeFi protocols to earn the highest returns. You provide liquidity, stake tokens, or lend assets — chasing the best APY. Higher rewards often mean higher risk.',
+  'q-36': 'Stablecoins are tokens designed to maintain a stable value, usually pegged 1:1 to USD. ckUSDC on ICP or USDC on Ethereum let you transact without volatility. They\'re the bridge between crypto and traditional finance.',
+  'q-37': 'TVL (Total Value Locked) measures how much money is deposited in a DeFi protocol. Higher TVL generally means more trust and usage. It\'s like checking how much money a bank holds — a key health metric.',
+  'q-38': 'Impermanent loss happens when you provide liquidity and token prices change significantly. You end up with less value than if you\'d simply held both tokens. It\'s "impermanent" because it only matters when you withdraw.',
+  'q-39': 'DeFi lending protocols let you supply tokens to earn interest, or borrow by depositing collateral — all automated by smart contracts. No credit checks, no paperwork. Protocols like Aave and Elluminex (on ICP) lead this space.',
+  'q-40': 'Staking means locking tokens to support a network and earn rewards. On ICP, you stake in neurons for governance. On other chains, you might stake to validate transactions. It\'s like earning interest for helping secure the network.',
+  'q-41': 'Flash loans let you borrow millions with zero collateral — but you must repay it (plus fees) in the same transaction. If you can\'t repay, the whole transaction reverts. Attackers use them for price manipulation.',
+  'q-42': 'ICP has a growing DeFi ecosystem: ICPSwap and Sonic (DEXs), and social platforms like DSCVR and OpenChat integrate token rewards and DeFi mechanics. It\'s still early, but expanding fast.',
+
+  // ─── NFTs & Digital Art ───
+  'q-7': 'NFTs (Non-Fungible Tokens) are unique digital tokens representing ownership of specific items — art, music, collectibles, or any digital content. Unlike Bitcoin (which is fungible), each NFT is one-of-a-kind.',
+  'q-70': '"Non-fungible" means unique and not interchangeable. A dollar bill is fungible (any dollar works). A painting is non-fungible (there\'s only one original). NFTs bring this uniqueness to digital assets.',
+  'q-71': 'Minting is the process of creating a new NFT on the blockchain. You register your digital content (image, music, etc.) and link it to a unique token. It\'s like publishing your work to the blockchain forever.',
+  'q-72': 'NFT metadata stores the details: name, description, image URL, and traits (attributes). It\'s what makes your NFT unique — the "fingerprint" that describes the asset. Metadata is usually stored on IPFS.',
+  'q-73': 'An NFT marketplace is a platform where users browse, buy, sell, and trade NFTs. Examples include OpenSea, Magic Eden, and Entrepot (on ICP). Think of it as eBay, but for digital collectibles.',
+  'q-74': 'Smart contracts define NFT rules: who owns what, how tokens transfer, and royalty percentages. They\'re the legal agreement and enforcement mechanism — all automated and on-chain.',
+  'q-75': 'NFT royalties ensure creators earn a percentage (typically 5-10%) every time their work is resold. Smart contracts enforce this automatically — no need to trust the buyer to pay up.',
+  'q-76': 'An NFT collection is a set of related NFTs — same creator, theme, or project. Think Bored Apes, Art Blocks, or Candid Cats (on ICP). Collections often have 1,000+ unique pieces with varying rarity.',
+  'q-77': 'IPFS (InterPlanetary File System) is a decentralized storage network. NFT images and metadata are stored on IPFS so they\'re permanent and censorship-resistant — not dependent on any single server.',
+
+  // ─── Web3 Security ───
+  'q-50': 'Phishing in Web3 uses fake sites, Discord DMs, or social media to trick you into connecting your wallet and signing malicious transactions. Always verify URLs and never sign transactions you don\'t understand.',
+  'q-51': 'A rug pull is an exit scam where project founders hype a project, collect funds, then disappear with the money. Red flags: anonymous team, no audit, unverified locked liquidity.',
+  'q-52': 'A smart contract audit is a professional security review. Auditors (like Trail of Bits or Certik) examine code for vulnerabilities before deployment. Critical for any project handling real funds.',
+  'q-53': 'A honeypot token lets you buy but blocks you from selling. Scammers use hidden logic (blacklisting, transfer restrictions) so only they can cash out. Always test with small amounts.',
+  'q-54': 'Your private key or seed phrase gives FULL control of ALL your assets across ALL networks. Never share it. No legitimate service will ever ask for it. Lose it = lose everything.',
+  'q-55': 'Hardware wallets (Ledger, Trezor) store private keys on an air-gapped device. Even if your computer is compromised, transactions must be physically confirmed on the device. Gold standard for security.',
+  'q-56': 'Approval phishing tricks you into signing unlimited token approvals. Attackers then drain your wallet at will. Always check approval amounts and revoke unused approvals via tools like revoker.app.',
+  'q-57': 'Front-running is when MEV bots monitor pending transactions and insert theirs first to profit from price movement. Common on Ethereum; ICP\'s architecture reduces this. It\'s like cutting in line at the mempool.',
+  'q-58': 'Reentrancy attacks exploit callbacks to drain funds. An attacker calls a withdrawal function, and before the balance updates, they call it again recursively. The 2016 DAO hack used this. Fixed by checks-effects-interactions pattern.',
+  'q-59': 'Flash loan attacks borrow millions in one transaction, manipulate prices, exploit a vulnerability, and repay — all in a single block. It\'s like robbing a bank and returning the money before anyone notices.',
+  'q-60': 'Always verify: correct URL (no typosquatting), contract address matches official docs, recent audit reports, community reputation, and use block explorers to verify code. Trust but verify.',
+
+  // ─── Smart Contracts ───
+  'q-60s': 'Smart contracts are self-executing programs on a blockchain. When conditions are met, they automatically execute — no intermediaries, no paperwork. They\'re the backbone of DeFi, NFTs, and DAOs.',
+  'q-61': 'Solidity is the primary language for Ethereum smart contracts. It\'s a statically-typed language similar to JavaScript, designed specifically for writing decentralized applications on EVM chains.',
+  'q-62': 'Gas is the fee paid to execute operations on blockchain. It compensates validators for computational work. On Ethereum, gas prices fluctuate; on ICP, cycle costs are stable and predictable.',
+  'q-63': 'Immutability means once a smart contract is deployed, the code cannot be changed. This is a feature (trustworthy) and a risk (bugs are permanent). That\'s why audits and upgradeable patterns matter.',
+  'q-64': 'A dApp (decentralized application) combines smart contracts (backend) with a frontend to create fully decentralized apps. No central server, no single point of failure — just code and consensus.',
+  'q-65': 'ERC-20 is the standard for creating fungible tokens on Ethereum. USDC, DAI, UNI — they all follow ERC-20 rules. It defines how tokens transfer, how supply works, and how wallets interact.',
+  'q-66': 'Upgradeable contracts use proxy patterns to allow code updates while preserving state and address. The logic contract can be swapped, but users interact with the same proxy. Balances flexibility with trust.',
+  'q-67': 'Reentrancy is a vulnerability where a function calls back into itself before finishing. Attackers exploit this to drain funds recursively. The DAO hack (2016) lost $60M this way. Prevention: update state before external calls.',
+  'q-68': 'OpenZeppelin provides battle-tested, audited smart contract templates for tokens, access control, and more. Instead of writing from scratch, developers use OpenZeppelin\'s secure building blocks.',
+  'q-69': 'A testnet is a testing environment that mimics the main blockchain. Developers experiment with fake tokens before deploying to mainnet with real value. ICP has a testnet; Ethereum has Sepolia and Goerli.',
+};
 
 const MOCK_QUESTIONS: Record<string, Question[]> = {
   'cat-1': [
@@ -89,14 +171,14 @@ const MOCK_QUESTIONS: Record<string, Question[]> = {
   ],
   'cat-4': [
     { id: 'q-7', categoryId: 'cat-4', question: 'What is an NFT?', options: ['A type of cryptocurrency', 'A non-fungible token representing unique ownership', 'A network protocol', 'A database system'], correctAnswer: 'A non-fungible token representing unique ownership', explanation: 'NFTs are unique digital tokens that represent ownership of specific items or content on the blockchain.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-40', categoryId: 'cat-4', question: 'What does "non-fungible" mean?', options: ['Very expensive', 'Unique and not interchangeable', 'Faster than other tokens', 'Open source'], correctAnswer: 'Unique and not interchangeable', explanation: 'Non-fungible means each token is unique — like a one-of-a-kind painting vs a dollar bill.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-41', categoryId: 'cat-4', question: 'What is minting an NFT?', options: ['Selling an NFT', 'Creating a new NFT on the blockchain', 'Buying an NFT', 'Deleting an NFT'], correctAnswer: 'Creating a new NFT on the blockchain', explanation: 'Minting is the process of registering a new NFT on-chain, linking it to digital content.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-42', categoryId: 'cat-4', question: 'What is NFT metadata?', options: ['The NFT price', 'Information describing the NFT (name, attributes, image)', 'The blockchain network', 'A wallet address'], correctAnswer: 'Information describing the NFT (name, attributes, image)', explanation: 'Metadata stores the NFT\'s name, image URL, and traits — what makes it unique.', difficulty: 'intermediate', points: 10n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-43', categoryId: 'cat-4', question: 'What is an NFT marketplace?', options: ['A physical store', 'A platform to buy, sell, and trade NFTs', 'A type of wallet', 'A blockchain'], correctAnswer: 'A platform to buy, sell, and trade NFTs', explanation: 'Marketplaces like OpenSea and Magic Eden let users browse, buy, and sell NFTs.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-44', categoryId: 'cat-4', question: 'What role do smart contracts play in NFTs?', options: ['They store images', 'They define ownership, transfers, and royalties', 'They mine NFTs', 'They are NFT wallets'], correctAnswer: 'They define ownership, transfers, and royalties', explanation: 'NFT smart contracts define who owns what, how tokens transfer, and royalty percentages.', difficulty: 'intermediate', points: 15n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-45', categoryId: 'cat-4', question: 'What are NFT royalties?', options: ['Tax on NFT sales', 'Percentage of secondary sales paid to the original creator', 'Gas fees', 'Storage costs'], correctAnswer: 'Percentage of secondary sales paid to the original creator', explanation: 'Royalties ensure creators earn money every time their NFT is resold — typically 5-10%.', difficulty: 'intermediate', points: 15n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-46', categoryId: 'cat-4', question: 'What is an NFT collection?', options: ['A single expensive NFT', 'A set of NFTs with a shared theme or creator', 'A type of blockchain', 'A wallet'], correctAnswer: 'A set of NFTs with a shared theme or creator', explanation: 'Collections group related NFTs — like Bored Apes or Art Blocks — often with 1,000+ unique pieces.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
-    { id: 'q-47', categoryId: 'cat-4', question: 'What is IPFS in the context of NFTs?', options: ['A payment system', 'A decentralized storage network for NFT files', 'A blockchain', 'A wallet'], correctAnswer: 'A decentralized storage network for NFT files', explanation: 'IPFS stores NFT images and metadata off-chain in a decentralized way, ensuring permanence.', difficulty: 'intermediate', points: 15n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-70', categoryId: 'cat-4', question: 'What does "non-fungible" mean?', options: ['Very expensive', 'Unique and not interchangeable', 'Faster than other tokens', 'Open source'], correctAnswer: 'Unique and not interchangeable', explanation: 'Non-fungible means each token is unique — like a one-of-a-kind painting vs a dollar bill.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-71', categoryId: 'cat-4', question: 'What is minting an NFT?', options: ['Selling an NFT', 'Creating a new NFT on the blockchain', 'Buying an NFT', 'Deleting an NFT'], correctAnswer: 'Creating a new NFT on the blockchain', explanation: 'Minting is the process of registering a new NFT on-chain, linking it to digital content.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-72', categoryId: 'cat-4', question: 'What is NFT metadata?', options: ['The NFT price', 'Information describing the NFT (name, attributes, image)', 'The blockchain network', 'A wallet address'], correctAnswer: 'Information describing the NFT (name, attributes, image)', explanation: 'Metadata stores the NFT\'s name, image URL, and traits — what makes it unique.', difficulty: 'intermediate', points: 10n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-73', categoryId: 'cat-4', question: 'What is an NFT marketplace?', options: ['A physical store', 'A platform to buy, sell, and trade NFTs', 'A type of wallet', 'A blockchain'], correctAnswer: 'A platform to buy, sell, and trade NFTs', explanation: 'Marketplaces like OpenSea and Magic Eden let users browse, buy, and sell NFTs.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-74', categoryId: 'cat-4', question: 'What role do smart contracts play in NFTs?', options: ['They store images', 'They define ownership, transfers, and royalties', 'They mine NFTs', 'They are NFT wallets'], correctAnswer: 'They define ownership, transfers, and royalties', explanation: 'NFT smart contracts define who owns what, how tokens transfer, and royalty percentages.', difficulty: 'intermediate', points: 15n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-75', categoryId: 'cat-4', question: 'What are NFT royalties?', options: ['Tax on NFT sales', 'Percentage of secondary sales paid to the original creator', 'Gas fees', 'Storage costs'], correctAnswer: 'Percentage of secondary sales paid to the original creator', explanation: 'Royalties ensure creators earn money every time their NFT is resold — typically 5-10%.', difficulty: 'intermediate', points: 15n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-76', categoryId: 'cat-4', question: 'What is an NFT collection?', options: ['A single expensive NFT', 'A set of NFTs with a shared theme or creator', 'A type of blockchain', 'A wallet'], correctAnswer: 'A set of NFTs with a shared theme or creator', explanation: 'Collections group related NFTs — like Bored Apes or Art Blocks — often with 1,000+ unique pieces.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-77', categoryId: 'cat-4', question: 'What is IPFS in the context of NFTs?', options: ['A payment system', 'A decentralized storage network for NFT files', 'A blockchain', 'A wallet'], correctAnswer: 'A decentralized storage network for NFT files', explanation: 'IPFS stores NFT images and metadata off-chain in a decentralized way, ensuring permanence.', difficulty: 'intermediate', points: 15n, createdAt: 0n, updatedAt: 0n },
   ],
   'cat-5': [
     { id: 'q-50', categoryId: 'cat-5', question: 'What is a phishing attack in Web3?', options: ['Fishing for crypto rewards', 'Tricking users into signing malicious transactions or revealing private keys via fake sites/msgs', 'A type of mining attack', 'A DDoS on a blockchain'], correctAnswer: 'Tricking users into signing malicious transactions or revealing private keys via fake sites/msgs', explanation: 'Web3 phishing uses fake dApp sites, Discord DMs, or Twitter posts to trick you into connecting your wallet and signing transactions that drain your funds.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
@@ -112,7 +194,7 @@ const MOCK_QUESTIONS: Record<string, Question[]> = {
     { id: 'q-60', categoryId: 'cat-5', question: 'What is the best way to verify a dApp before connecting your wallet?', options: ['Trust Twitter ads', 'Check the URL, verify contract addresses, look for audits, and use tools like ICSCan', 'Connect immediately', 'Only use MetaMask'], correctAnswer: 'Check the URL, verify contract addresses, look for audits, and use tools like ICSCan', explanation: 'Always verify: correct URL (check for typosquatting), contract address matches official docs, recent audit reports, community reputation, and use block explorers to verify code.', difficulty: 'intermediate', points: 10n, createdAt: 0n, updatedAt: 0n },
   ],
   'cat-6': [
-    { id: 'q-60', categoryId: 'cat-6', question: 'What is a smart contract?', options: ['A legal agreement', 'Self-executing code on a blockchain', 'A type of wallet', 'A cryptocurrency'], correctAnswer: 'Self-executing code on a blockchain', explanation: 'Smart contracts are programs that automatically execute when conditions are met — no intermediaries needed.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
+    { id: 'q-60s', categoryId: 'cat-6', question: 'What is a smart contract?', options: ['A legal agreement', 'Self-executing code on a blockchain', 'A type of wallet', 'A cryptocurrency'], correctAnswer: 'Self-executing code on a blockchain', explanation: 'Smart contracts are programs that automatically execute when conditions are met — no intermediaries needed.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
     { id: 'q-61', categoryId: 'cat-6', question: 'What language is used for Ethereum smart contracts?', options: ['Python', 'Solidity', 'JavaScript', 'Rust'], correctAnswer: 'Solidity', explanation: 'Solidity is the primary language for writing smart contracts on Ethereum and EVM-compatible chains.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
     { id: 'q-62', categoryId: 'cat-6', question: 'What is gas in smart contracts?', options: ['Fuel for computers', 'The fee paid to execute operations on blockchain', 'A type of token', 'A mining reward'], correctAnswer: 'The fee paid to execute operations on blockchain', explanation: 'Gas compensates validators for the computational work of executing your smart contract code.', difficulty: 'beginner', points: 10n, createdAt: 0n, updatedAt: 0n },
     { id: 'q-63', categoryId: 'cat-6', question: 'What is immutability in smart contracts?', options: ['They can be changed anytime', 'Once deployed, the code cannot be altered', 'They run forever', 'They use encryption'], correctAnswer: 'Once deployed, the code cannot be altered', explanation: 'Immutability means deployed contracts cannot be modified — this is both a feature and a risk.', difficulty: 'intermediate', points: 15n, createdAt: 0n, updatedAt: 0n },
@@ -134,6 +216,16 @@ let mockUsers: UserProfile[] = [];
 
 // ── Helpers ───────────────────────────────────────────
 
+/** Merge lesson content into questions */
+function withLessons(questions: Question[]): Question[] {
+  return questions.map((q) => ({
+    ...q,
+    lesson: LESSONS[q.id] ?? 'Read the lesson below, then answer the question.',
+  }));
+}
+
+// ── Helpers ───────────────────────────────────────────
+
 function getTier(xp: number): UserScore['tier'] {
   if (xp >= 100000) return 'diamond';
   if (xp >= 50000) return 'platinum';
@@ -148,19 +240,19 @@ function checkAndAwardAchievements(userId: string, score: UserScore) {
   const now = BigInt(Date.now());
 
   const defs: { name: string; desc: string; icon: string; check: () => boolean }[] = [
-    { name: 'First Quiz', desc: 'Complete your first quiz', icon: '🎯', check: () => score.quizzesCompleted >= 1n },
-    { name: 'Quick Learner', desc: 'Complete 10 quizzes', icon: '📚', check: () => score.quizzesCompleted >= 10n },
-    { name: 'Quiz Master', desc: 'Complete 50 quizzes', icon: '🏆', check: () => score.quizzesCompleted >= 50n },
-    { name: 'Perfect Score', desc: 'Get 100% on any quiz', icon: '💯', check: () => score.correctAnswers === score.totalAnswers && score.totalAnswers > 0n },
-    { name: 'Bronze Tier', desc: 'Reach Bronze tier', icon: '🥉', check: () => score.tier === 'bronze' },
-    { name: 'Silver Tier', desc: 'Reach Silver tier', icon: '🥈', check: () => score.tier === 'silver' },
-    { name: 'Gold Tier', desc: 'Reach Gold tier', icon: '🥇', check: () => score.tier === 'gold' },
-    { name: 'Platinum Tier', desc: 'Reach Platinum tier', icon: '💎', check: () => score.tier === 'platinum' },
-    { name: 'Diamond Tier', desc: 'Reach Diamond tier', icon: '👑', check: () => score.tier === 'diamond' },
-    { name: 'On Fire', desc: '7-day quiz streak', icon: '🔥', check: () => score.streak >= 7n },
-    { name: 'Unstoppable', desc: '30-day quiz streak', icon: '⚡', check: () => score.streak >= 30n },
-    { name: 'Century', desc: 'Earn 100 XP', icon: '💪', check: () => score.totalXP >= 100n },
-    { name: 'Thousand', desc: 'Earn 1,000 XP', icon: '🌟', check: () => score.totalXP >= 1000n },
+    { name: 'First Quiz', desc: 'Complete your first quiz', icon: 'target', check: () => score.quizzesCompleted >= 1n },
+    { name: 'Quick Learner', desc: 'Complete 10 quizzes', icon: 'book-open', check: () => score.quizzesCompleted >= 10n },
+    { name: 'Quiz Master', desc: 'Complete 50 quizzes', icon: 'trophy', check: () => score.quizzesCompleted >= 50n },
+    { name: 'Perfect Score', desc: 'Get 100% on any quiz', icon: 'check-circle', check: () => score.correctAnswers === score.totalAnswers && score.totalAnswers > 0n },
+    { name: 'Bronze Tier', desc: 'Reach Bronze tier', icon: 'medal-bronze', check: () => score.tier === 'bronze' },
+    { name: 'Silver Tier', desc: 'Reach Silver tier', icon: 'medal-silver', check: () => score.tier === 'silver' },
+    { name: 'Gold Tier', desc: 'Reach Gold tier', icon: 'medal-gold', check: () => score.tier === 'gold' },
+    { name: 'Platinum Tier', desc: 'Reach Platinum tier', icon: 'gem', check: () => score.tier === 'platinum' },
+    { name: 'Diamond Tier', desc: 'Reach Diamond tier', icon: 'crown', check: () => score.tier === 'diamond' },
+    { name: 'On Fire', desc: '7-day quiz streak', icon: 'flame', check: () => score.streak >= 7n },
+    { name: 'Unstoppable', desc: '30-day quiz streak', icon: 'zap', check: () => score.streak >= 30n },
+    { name: 'Century', desc: 'Earn 100 XP', icon: 'dumbbell', check: () => score.totalXP >= 100n },
+    { name: 'Thousand', desc: 'Earn 1,000 XP', icon: 'star', check: () => score.totalXP >= 1000n },
   ];
 
   for (const def of defs) {
@@ -223,14 +315,14 @@ export const api = {
       }
     }
     await delay(400);
-    return MOCK_QUESTIONS[categoryId] ?? [];
+    return withLessons(MOCK_QUESTIONS[categoryId] ?? []);
   },
 
   async getQuestion(id: string): Promise<Question | null> {
     await delay(200);
     for (const qs of Object.values(MOCK_QUESTIONS)) {
       const q = qs.find((q) => q.id === id);
-      if (q) return q;
+      if (q) return { ...q, lesson: LESSONS[q.id] ?? '' };
     }
     return null;
   },

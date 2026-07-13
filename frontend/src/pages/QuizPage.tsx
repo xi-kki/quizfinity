@@ -10,7 +10,6 @@ import type {
 } from '@/types';
 import {
   Loader2,
-  ArrowLeft,
   CheckCircle2,
   XCircle,
   Trophy,
@@ -18,10 +17,13 @@ import {
   Sparkles,
   RotateCcw,
   AlertTriangle,
+  BookOpen,
+  ArrowRight,
 } from 'lucide-react';
+import { getIcon } from '@/lib/icons';
 import clsx from 'clsx';
 
-type Phase = 'loading' | 'ready' | 'playing' | 'review' | 'complete' | 'error';
+type Phase = 'loading' | 'ready' | 'lesson' | 'playing' | 'review' | 'complete' | 'error';
 
 export default function QuizPage() {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -86,7 +88,7 @@ export default function QuizPage() {
       setLastResult(null);
       setResults([]);
       setShowExplanation(false);
-      setPhase('playing');
+      setPhase('lesson'); // Start with lesson
     } catch (err: any) {
       setError(err.message);
       setPhase('error');
@@ -122,6 +124,7 @@ export default function QuizPage() {
       setSelectedAnswer(null);
       setLastResult(null);
       setShowExplanation(false);
+      setPhase('lesson'); // Show lesson for next question
     } else {
       // Complete the quiz
       if (!session) return;
@@ -149,6 +152,11 @@ export default function QuizPage() {
       }
     }
   }, [currentIndex, questions.length, session, results, user]);
+
+  // Go from lesson to question
+  const startQuestion = useCallback(() => {
+    setPhase('playing');
+  }, []);
 
   const correctCount = results.filter((r) => r.correct).length;
 
@@ -268,7 +276,14 @@ export default function QuizPage() {
   if (phase === 'ready') {
     return (
       <div className="mx-auto max-w-2xl py-16 text-center">
-        <span className="text-6xl">{category?.icon}</span>
+        {(() => {
+          const Icon = getIcon(category?.icon ?? 'globe');
+          return (
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-brand-100 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
+              <Icon className="h-10 w-10" />
+            </div>
+          );
+        })()}
         <h1 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
           {category?.name}
         </h1>
@@ -285,7 +300,7 @@ export default function QuizPage() {
           className="btn-primary mt-8 text-lg"
         >
           <Zap className="h-5 w-5" />
-          {status === 'authenticated' ? 'Start Quiz' : 'Sign In to Start'}
+          {status === 'authenticated' ? 'Start Learning' : 'Sign In to Start'}
         </button>
 
         {status !== 'authenticated' && (
@@ -293,6 +308,74 @@ export default function QuizPage() {
             Sign in to track your progress and earn XP
           </p>
         )}
+      </div>
+    );
+  }
+
+  // ── Lesson Phase ──
+  if (phase === 'lesson') {
+    const question = questions[currentIndex];
+    if (!question) return null;
+
+    return (
+      <div className="mx-auto max-w-2xl py-4">
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <span>
+              Question {currentIndex + 1} of {questions.length}
+            </span>
+            <span className="font-medium text-brand-600 dark:text-brand-400">
+              {correctCount} correct so far
+            </span>
+          </div>
+          <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-brand-400 to-icp-500 transition-all duration-500"
+              style={{
+                width: `${((currentIndex + 1) / questions.length) * 100}%`,
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Lesson Card */}
+        <div className="card border-brand-200 bg-gradient-to-br from-brand-50 to-white dark:border-brand-800 dark:from-brand-950/20 dark:to-gray-900">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-100 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wider text-brand-600 dark:text-brand-400">
+                Quick Lesson
+              </p>
+              <p className="text-sm text-gray-500">
+                {category?.name} · Question {currentIndex + 1}
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+            {question.question}
+          </h2>
+
+          <div className="rounded-xl bg-white/60 p-4 dark:bg-gray-800/60">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {question.lesson}
+            </p>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="badge-blue">{question.difficulty}</span>
+              <span className="badge-gold">{Number(question.points)} XP</span>
+            </div>
+            <button onClick={startQuestion} className="btn-primary">
+              I understand — Quiz me!
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -427,8 +510,8 @@ export default function QuizPage() {
             <button onClick={nextQuestion} className="btn-primary">
               {currentIndex < questions.length - 1 ? (
                 <>
-                  Next Question
-                  <ArrowLeft className="h-4 w-4 rotate-180" />
+                  Next Lesson
+                  <ArrowRight className="h-4 w-4" />
                 </>
               ) : (
                 <>

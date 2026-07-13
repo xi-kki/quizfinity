@@ -13,14 +13,15 @@ import {
   Target,
   Sparkles,
 } from 'lucide-react';
+import { getIcon } from '@/lib/icons';
 import clsx from 'clsx';
 
-const TIER_BADGES: Record<string, { color: string; bg: string; label: string }> = {
-  bronze: { color: 'text-orange-600', bg: 'bg-orange-100 dark:bg-orange-900/30', label: '🥉 Bronze' },
-  silver: { color: 'text-gray-500', bg: 'bg-gray-100 dark:bg-gray-800', label: '🥈 Silver' },
-  gold: { color: 'text-amber-500', bg: 'bg-amber-100 dark:bg-amber-900/30', label: '🥇 Gold' },
-  platinum: { color: 'text-sky-500', bg: 'bg-sky-100 dark:bg-sky-900/30', label: '💎 Platinum' },
-  diamond: { color: 'text-purple-500', bg: 'bg-purple-100 dark:bg-purple-900/30', label: '👑 Diamond' },
+const TIER_BADGES: Record<string, { color: string; bg: string; label: string; icon: string }> = {
+  bronze: { color: 'text-orange-600', bg: 'bg-orange-100 dark:bg-orange-900/30', label: 'Bronze', icon: 'medal-bronze' },
+  silver: { color: 'text-gray-500', bg: 'bg-gray-100 dark:bg-gray-800', label: 'Silver', icon: 'medal-silver' },
+  gold: { color: 'text-amber-500', bg: 'bg-amber-100 dark:bg-amber-900/30', label: 'Gold', icon: 'medal-gold' },
+  platinum: { color: 'text-sky-500', bg: 'bg-sky-100 dark:bg-sky-900/30', label: 'Platinum', icon: 'gem' },
+  diamond: { color: 'text-purple-500', bg: 'bg-purple-100 dark:bg-purple-900/30', label: 'Diamond', icon: 'crown' },
 };
 
 export default function ProfilePage() {
@@ -103,6 +104,10 @@ export default function ProfilePage() {
             <div className="mt-3 flex flex-wrap items-center gap-2">
               {score && (
                 <span className={clsx('badge', TIER_BADGES[score.tier]?.bg, TIER_BADGES[score.tier]?.color)}>
+                  {(() => {
+                    const Icon = getIcon(TIER_BADGES[score.tier]?.icon ?? 'medal-bronze');
+                    return <Icon className="h-3.5 w-3.5" />;
+                  })()}
                   {TIER_BADGES[score.tier]?.label}
                 </span>
               )}
@@ -145,17 +150,20 @@ export default function ProfilePage() {
         </div>
         {achievements.length > 0 ? (
           <div className="mt-4 flex flex-wrap gap-3">
-            {achievements.slice(0, 6).map((ach) => (
-              <div
-                key={ach.id}
-                className="flex items-center gap-2 rounded-xl bg-gradient-to-br from-brand-50 to-white px-4 py-2 dark:from-brand-950/20 dark:to-gray-900"
-              >
-                <span className="text-xl">{ach.icon}</span>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {ach.name}
-                </span>
-              </div>
-            ))}
+            {achievements.slice(0, 6).map((ach) => {
+              const Icon = getIcon(ach.icon);
+              return (
+                <div
+                  key={ach.id}
+                  className="flex items-center gap-2 rounded-xl bg-gradient-to-br from-brand-50 to-white px-4 py-2 dark:from-brand-950/20 dark:to-gray-900"
+                >
+                  <Icon className="h-5 w-5 text-brand-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {ach.name}
+                  </span>
+                </div>
+              );
+            })}
             {achievements.length > 6 && (
               <span className="flex items-center text-sm text-gray-400">
                 +{achievements.length - 6} more

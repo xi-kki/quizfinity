@@ -13,6 +13,7 @@ export interface Question {
   id: string;
   categoryId: string;
   question: string;
+  lesson?: string;
   options: string[];
   correctAnswer: string;
   explanation: string;
