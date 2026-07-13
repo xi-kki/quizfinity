@@ -1,17 +1,17 @@
 # Dependencies
 node_modules/
-.pnp
-.pnp.js
+.pnp.*
 
-# Build outputs
+# Build output
 dist/
 build/
-.out/
-.next/
+.wasm/
 
 # Environment
 .env
 .env.local
+.env.*.local
+.env.development
 .env.production
 
 # IDE
@@ -29,13 +29,17 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# ICP / dfx
-.dfx/
+# ICP
+dfx_output/
 canister_ids.json
+.candid/
 
-# Coverage
+# Testing
 coverage/
 
-# Temporary
-tmp/
-temp/
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+*.pem
+*.key

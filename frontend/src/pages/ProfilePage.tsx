@@ -6,17 +6,12 @@ import type { UserScore, QuizSession, Achievement } from '@/types';
 import {
   User,
   Loader2,
-  Trophy,
   Zap,
   BookOpen,
-  Award,
-  TrendingUp,
-  Medal,
   LogIn,
   Flame,
   Target,
   Sparkles,
-  ExternalLink,
 } from 'lucide-react';
 import clsx from 'clsx';
 

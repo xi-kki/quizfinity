@@ -6,7 +6,6 @@ import type { QuizCategory } from '@/types';
 import {
   Sparkles,
   ArrowRight,
-  TrendingUp,
   Users,
   Trophy,
   Zap,
@@ -16,15 +15,10 @@ import {
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { status, user, login } = useAuth();
+  const { status, login } = useAuth();
   const [categories, setCategories] = useState<QuizCategory[]>([]);
-  const [stats, setStats] = useState({ users: 0, quizzes: 0, xp: 0 });
-
   useEffect(() => {
     api.getCategories().then(setCategories);
-    api.getLeaderboard(1, 0).then((lb) => {
-      setStats((s) => ({ ...s, users: lb.length }));
-    });
   }, []);
 
   return (

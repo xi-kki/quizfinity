@@ -1,5 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import ThemeToggle from './ThemeToggle';
 import {
   Home,
   BookOpen,
@@ -61,7 +62,8 @@ export default function Layout() {
           </nav>
 
           {/* Auth Button */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             {status === 'authenticated' && user ? (
               <div className="flex items-center gap-3">
                 <Link to="/profile" className="flex items-center gap-2 rounded-xl px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800">

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/icp';
 import type {
@@ -25,7 +25,6 @@ type Phase = 'loading' | 'ready' | 'playing' | 'review' | 'complete' | 'error';
 
 export default function QuizPage() {
   const { categoryId } = useParams<{ categoryId: string }>();
-  const navigate = useNavigate();
   const { status, user, login } = useAuth();
 
   const [phase, setPhase] = useState<Phase>('loading');

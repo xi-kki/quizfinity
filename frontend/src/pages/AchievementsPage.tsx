@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/icp';
 import type { Achievement } from '@/types';
-import { Award, Loader2, Lock, Sparkles } from 'lucide-react';
+import { Award, Loader2, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 
 // All possible achievements (for showing locked ones)

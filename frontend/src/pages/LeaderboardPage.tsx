@@ -2,16 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '@/lib/icp';
 import type { LeaderboardEntry } from '@/types';
-import { Trophy, Medal, Loader2, ArrowUp, User } from 'lucide-react';
+import { Trophy, Loader2, User } from 'lucide-react';
 import clsx from 'clsx';
-
-const TIER_COLORS: Record<string, string> = {
-  diamond: 'text-purple-500',
-  platinum: 'text-sky-500',
-  gold: 'text-amber-500',
-  silver: 'text-gray-400',
-  bronze: 'text-orange-600',
-};
 
 const TIER_ICONS: Record<string, string> = {
   diamond: '👑',
