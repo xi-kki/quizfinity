@@ -2,7 +2,7 @@
  * ICP Canister Client — mock + real adapter
  * 
  * In development (no dfx), this returns mock data.
- * When deployed to ICP, swap in the real canister actor.
+ * When deployed to ICP with canister IDs, uses real actors.
  */
 
 import type {
@@ -15,6 +15,23 @@ import type {
   LeaderboardEntry,
   UserProfile,
 } from '@/types';
+import { isProduction } from './canister.config';
+import { getQuizEngineActor, getScoringActor, getUserActor } from './actor';
+
+// ── Canister Actors (lazy init) ────────────────────────
+
+let quizEngine: any = null;
+let scoring: any = null;
+let userActor: any = null;
+
+function getActors() {
+  if (isProduction && !quizEngine) {
+    quizEngine = getQuizEngineActor();
+    scoring = getScoringActor();
+    userActor = getUserActor();
+  }
+  return { quizEngine, scoring, userActor };
+}
 
 // ── Mock Data ────────────────────────────────────────
 
@@ -167,17 +184,44 @@ const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export const api = {
   // ─── Categories ───
   async getCategories(): Promise<QuizCategory[]> {
+    const actors = getActors();
+    if (actors.quizEngine) {
+      try {
+        const result = await actors.quizEngine.getAllCategories();
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(300);
     return MOCK_CATEGORIES;
   },
 
   async getCategory(id: string): Promise<QuizCategory | null> {
+    const actors = getActors();
+    if (actors.quizEngine) {
+      try {
+        const result = await actors.quizEngine.getCategory(id);
+        return result[0] ?? null;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(200);
     return MOCK_CATEGORIES.find((c) => c.id === id) ?? null;
   },
 
   // ─── Questions ───
   async getQuestionsByCategory(categoryId: string): Promise<Question[]> {
+    const actors = getActors();
+    if (actors.quizEngine) {
+      try {
+        const result = await actors.quizEngine.getQuestionsByCategory(categoryId);
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(400);
     return MOCK_QUESTIONS[categoryId] ?? [];
   },
@@ -193,6 +237,15 @@ export const api = {
 
   // ─── Quiz Sessions ───
   async startQuiz(userId: string, categoryId: string): Promise<QuizSession> {
+    const actors = getActors();
+    if (actors.quizEngine) {
+      try {
+        const result = await actors.quizEngine.startQuiz(userId, categoryId);
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(500);
     const questions = await api.getQuestionsByCategory(categoryId);
     const session: QuizSession = {
@@ -215,6 +268,15 @@ export const api = {
     questionId: string,
     selectedAnswer: string
   ): Promise<SubmitAnswerResult> {
+    const actors = getActors();
+    if (actors.quizEngine) {
+      try {
+        const result = await actors.quizEngine.submitAnswer(sessionId, questionId, selectedAnswer);
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(300);
     const question = await api.getQuestion(questionId);
     if (!question) throw new Error('Question not found');
@@ -265,6 +327,20 @@ export const api = {
     correct: boolean,
     totalQuestions: number
   ): Promise<UserScore> {
+    const actors = getActors();
+    if (actors.scoring) {
+      try {
+        const result = await actors.scoring.updateScore(
+          userId,
+          BigInt(xpEarned),
+          correct,
+          BigInt(totalQuestions)
+        );
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(300);
     const existing = mockScores[userId];
     const now = BigInt(Date.now());
@@ -311,6 +387,15 @@ export const api = {
   },
 
   async getLeaderboard(limit = 10, offset = 0): Promise<LeaderboardEntry[]> {
+    const actors = getActors();
+    if (actors.scoring) {
+      try {
+        const result = await actors.scoring.getLeaderboard(BigInt(limit), BigInt(offset));
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(300);
     return Object.values(mockScores)
       .sort((a, b) => Number(b.totalXP - a.totalXP))
@@ -326,6 +411,15 @@ export const api = {
 
   // ─── Achievements ───
   async getUserAchievements(userId: string): Promise<Achievement[]> {
+    const actors = getActors();
+    if (actors.scoring) {
+      try {
+        const result = await actors.scoring.getUserAchievements(userId);
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(200);
     return mockAchievements.filter((a) => a.userId === userId);
   },
@@ -338,6 +432,21 @@ export const api = {
     authProvider: string,
     avatar: string
   ): Promise<UserProfile> {
+    const actors = getActors();
+    if (actors.userActor) {
+      try {
+        const result = await actors.userActor.createUser(
+          username,
+          displayName,
+          principalId,
+          authProvider,
+          avatar
+        );
+        return result;
+      } catch (e) {
+        console.warn('Canister call failed, using mock:', e);
+      }
+    }
     await delay(400);
     const user: UserProfile = {
       id: `user-${Date.now()}`,

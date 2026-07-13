@@ -107,16 +107,16 @@ npm install
 npm run dev
 ```
 
-## 🧪 Available Quizzes
+## 🧪 Available Quizzes (66 Questions)
 
-| Category | Description | Questions |
-|----------|-------------|-----------|
-| 🔗 Blockchain Basics | Learn blockchain fundamentals | 3 |
-| 🌐 ICP Fundamentals | Master the Internet Computer | 2 |
-| 💰 DeFi & Tokenomics | Decentralized finance explained | 1 |
-| 🎨 NFTs & Digital Art | Digital ownership on-chain | 1 |
-| 🛡️ Web3 Security | Stay safe in Web3 | Coming soon |
-| 📝 Smart Contracts | Programmable blockchain contracts | Coming soon |
+| Category | Description | Questions | XP Available |
+|----------|-------------|-----------|-------------|
+| 🔗 Blockchain Basics | Fundamentals of blockchain technology | 11 | 125 |
+| 🌐 ICP Fundamentals | Master the Internet Computer | 12 | 165 |
+| 💰 DeFi & Tokenomics | Decentralized finance explained | 12 | 155 |
+| 🎨 NFTs & Digital Art | Digital ownership on-chain | 10 | 120 |
+| 🛡️ Web3 Security | Stay safe in Web3 | 10 | 155 |
+| 📝 Smart Contracts | Programmable blockchain contracts | 10 | 125 |
 
 ## 📊 Tier System
 
@@ -138,15 +138,44 @@ npm run dev
 
 ## 🗺️ Roadmap
 
-- [x] Frontend scaffold (React + Vite + Tailwind)
+### Phase 1 — MVP Frontend ✅
+- [x] Frontend scaffold (React + Vite + TypeScript + Tailwind)
 - [x] Mock API layer for local development
 - [x] Quiz gameplay loop (start → answer → score → complete)
-- [ ] Azle canister deployment to ICP testnet
-- [ ] Internet Identity integration
+- [x] 66 questions across 6 categories
+- [x] XP system with tier progression (Bronze → Diamond)
+- [x] 13 achievements
+- [x] Leaderboard
+- [x] Dark/light mode
+- [x] Responsive design (mobile bottom nav)
+- [x] Internet Identity auth integration
+- [x] Canister client with mock/real adapter
+
+### Phase 2 — ICP Backend ✅
+- [x] 3 Azle canisters (quiz_engine, scoring, user)
+- [x] On-chain quiz session management
+- [x] XP scoring + achievement logic
+- [x] User profile CRUD
+- [x] Candid IDL definitions
+
+### Phase 3 — Deploy 🚀
+- [x] Deploy frontend to Vercel
+- [ ] Deploy Azle canisters to ICP testnet
+- [ ] Connect frontend to real canisters
+- [ ] Test end-to-end flow on testnet
+
+### Phase 3 — Enhanced Features 🔮
 - [ ] Real-time leaderboard updates
 - [ ] $QUIZ token rewards
 - [ ] Community-created quizzes
 - [ ] NFT badge minting
+- [ ] Deploy to ICP mainnet
+
+## 🌐 Live Demo
+
+**Frontend:** [quizfinity.vercel.app](https://quizfinity.vercel.app) (mock mode — play quizzes without ICP)
+
+To play with real on-chain data, deploy the canisters first (see [DEPLOY.md](DEPLOY.md)).
 
 ## 👥 Team
 

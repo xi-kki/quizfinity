@@ -41,10 +41,10 @@ quizfinity/
   4. Frontend — React SPA with Tailwind, responsive, dark/light mode
 
 ## ⚡ Build Phases
-- **Phase 1 (Now):** Frontend scaffold + mock quiz flow + GitHub setup
-- **Phase 2:** Azle canisters + Internet Identity integration
+- **Phase 1 (Done):** Frontend scaffold + mock quiz flow + GitHub setup ✅
+- **Phase 2 (Ready):** ICP deployment + canister connection
 - **Phase 3:** Token rewards + leaderboards + community quizzes
-- **Phase 4:** Deploy to ICP mainnet + Vercel
+- **Phase 4:** Deploy to ICP mainnet
 
 ## 🔐 Security (NON-NEGOTIABLE)
 1. NEVER commit .env or canister private keys
